@@ -13,7 +13,7 @@ function App(){
       <Alert>
         <h1>Hello World</h1>
       </Alert>
-      <Button text="Click me"  />
+      <Button>Click Me</Button>
     </div>
   )
 }

@@ -1,11 +1,11 @@
 interface Props {
-    text: string
+    children: string
 }
 
 
-const Button = ({ text }: Props) => {
+const Button = ({ children }: Props) => {
     return (
-        <button type="button" className="btn btn-primary" onClick={()=> console.log(text)}>{text}</button>
+        <button type="button" className="btn btn-primary" onClick={()=> console.log(children)}>{children}</button>
     )
 }
 
