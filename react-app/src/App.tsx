@@ -1,8 +1,10 @@
 import Alert from "./components/Alert"
 import ListGroup from "./components/ListGroup"
 import Button from "./components/Button"
+import { useState } from "react"
 
 function App(){
+  const [AlertVisibility, setAlertVisibility] = useState(false)
   const items = ["New York", "Chicago", "Las vegas"]
   const handleSelectItem = (item: string) => {
     console.log(item)
@@ -10,10 +12,9 @@ function App(){
   return (
     <div>
       < ListGroup items={items} heading="Cities" onSelectItem={handleSelectItem}/>
-      <Alert>
-        <h1>Hello World</h1>
-      </Alert>
-      <Button>Click Me</Button>
+      {AlertVisibility && <Alert onClose={() => {setAlertVisibility(false)}}><h1>Hello World</h1></Alert>}
+      
+      <Button color="primary" onClick={() => {setAlertVisibility(true)}}>Click Me</Button>
     </div>
   )
 }
