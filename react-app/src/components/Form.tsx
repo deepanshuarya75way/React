@@ -13,7 +13,7 @@ const Form = () => {
             .string()
             .required("password is required")
             .min(8, "Passowrd must be atleast 8 charchters long"),
-    });
+    })
     const {register, handleSubmit, formState: { errors }} = useForm<FormFields>({resolver: yupResolver(schema)});
     const onSubmit: SubmitHandler<FormFields> = (data) => {
         console.log(data);
