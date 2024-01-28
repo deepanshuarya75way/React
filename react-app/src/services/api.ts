@@ -1,8 +1,8 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
-export const api = createApi({
-    reducerPath: 'api',
-    baseQuery: fetchBaseQuery({ baseUrl: "https://jsonplaceholder.typicode.com/" }),
+export const authapi = createApi({
+    reducerPath: 'authapi',
+    baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:3000/auth/" }),
     endpoints: (builder) => ({
         getToDoById: builder.query<Todo, number>({
             query: (id) => `todo/${id}`,
@@ -10,9 +10,9 @@ export const api = createApi({
         getToDos: builder.query<Todo[], void>({
             query: () => `todos`
         }),
-        createTodo: builder.mutation<void, Omit<Todo, 'id'>>({
+        createUser: builder.mutation({
             query: (body) => ({
-                url: `todos`,
+                url: `/register`,
                 method: 'POST',
                 body,
             }),
@@ -21,5 +21,5 @@ export const api = createApi({
 })
 
 
-export const { useGetToDoByIdQuery, useLazyGetToDoByIdQuery, useGetToDosQuery, useCreateTodoMutation } = api
+export const { useGetToDoByIdQuery, useLazyGetToDoByIdQuery, useGetToDosQuery, useCreateUserMutation } = authapi
 
