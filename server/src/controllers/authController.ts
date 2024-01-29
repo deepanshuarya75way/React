@@ -54,7 +54,12 @@ const loginUser = async (req: Request, res: Response) => {
                 res.cookie('access_token', access_token, { httpOnly: true, maxAge: 1000 * 15 })
                 res.cookie('refresh_token', refresh_token, { httpOnly: true })
                 return res.status(200).json({
-                    success: "User Logged In"
+                    success: "User Logged In",
+                    _id: user._id,
+                    name: user.username,
+                    email: user.email,
+                    access_token: access_token,
+                    refreshToken: user.refresh_token
                 })
             })
             .catch((err) => {

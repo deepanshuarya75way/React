@@ -5,15 +5,24 @@ import Dashboard from './pages/Dashboard';
 import Login from './pages/Login';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
+import { useEffect } from 'react';
+import { setUser } from './store/reducers/authSlice';
+import { useAppDispatch } from './hooks/hooks';
 
 
 function App() {
+  const dispatch = useAppDispatch()
+  const user = JSON.parse(localStorage.getItem("user") || "{}")
+  useEffect(() =>{
+    dispatch(setUser(user))
+  }, [])
   return (
     <div className="App">
       <BrowserRouter>
       <ToastContainer />
         <Routes>
-          <Route path="/" element={<Navigate to="/auth" replace />} />
+          <Route path="/" element={<Navigate to="/auth/login" replace />} />
+          <Route path='/auth' element={<Navigate to="/auth/login" replace />} />
           <Route path="/auth/register" element={<Auth />} />
           <Route path="/auth/login" element={<Login />} />
           <Route path="/dashboard" element={< Dashboard />} />

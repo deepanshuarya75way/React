@@ -2,14 +2,14 @@ import * as yup from "yup";
 import { yupResolver } from '@hookform/resolvers/yup'
 import { SubmitHandler, useForm } from "react-hook-form";
 import { useEffect, useState } from "react";
-import { useLoginUserMutation } from "../services/AuthApi";
+import { useRegisterUserMutation } from "../services/AuthApi";
 import { toast } from "react-toastify";
-import { useActionData, useNavigate } from "react-router-dom";
-
+import { useNavigate } from "react-router-dom";
 
 
 
 type SignUpFormFields = {
+  username: string
   firstName: string;
   lastName: string;
   email: string;
@@ -31,35 +31,27 @@ const initialState = {
 const Auth = () => {
   const navigate = useNavigate()
   const [formValues, setFormValues] = useState(initialState);
-  const {email, password} = formValues
-  const dispatch = useActionData()
+  const {username, firstName, lastName, email, password, confirmPassword} = formValues
 
 
-  const [loginUser, { data: loginData, isSuccess: isLoginSuccess, isError: isLoginError, error: loginError }] = useLoginUserMutation()
+  const [registerUser, { data: registerData, isSuccess: isRegisterSuccess, isError: isRegisterError, error: registerError }] = useRegisterUserMutation()
 
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setFormValues({ ...formValues, [name]: value });
   }
-  const handleLogin = async() => {
-    if(email && password){
-      await loginUser({email, password})
-    }else{
-      toast.error("All firlds are required")
-    }
-  }
-
   
   useEffect(() => {
-    if (isLoginSuccess) {
-      toast.success("Login Success")
-      dispatch(setUser({}))
-      navigate('/dashboard')
+    if (isRegisterSuccess) {
+      toast.success("Registered Successfuly")
+      navigate('/auth/login')
     }
-  }, [isLoginSuccess, isLoginError])
+
+  }, [isRegisterSuccess, isRegisterError])
 
   const schema = yup.object({
+    username: yup.string().min(1, "username cant be empty").required(),
     firstName: yup.string().min(1, "First name can't be empty").required("Field required"),
     lastName: yup.string().min(1, "Last name can't be empty").required("Field required"),
     email: yup.string().email("enter valid email").min(1, "email can't be empty").required("Field required"),
@@ -73,13 +65,34 @@ const Auth = () => {
       .min(8, "Passowrd must be atleast 8 charchters long"),
   });
   const { register, handleSubmit, formState: { errors } } = useForm<SignUpFormFields>({ resolver: yupResolver(schema) })
-  const onSubmit: SubmitHandler<SignUpFormFields> = (data) => {
+  const onSubmit: SubmitHandler<SignUpFormFields> = async (data) => {
     console.log(data);
+    if(username && firstName && lastName && email && password && confirmPassword){
+      await registerUser({username, firstName, lastName, email, password, confirmPassword})
+    }
+    
   };
   return (
     <>
       <h1>Auth</h1>
       <form className="row g-3" onSubmit={handleSubmit(onSubmit)}>
+
+      <div className="col-md-4">
+          <label htmlFor="validationServer01" className="form-label">Username</label>
+          <input
+            className={errors.username ? 'form-control is-invalid' : 'form-control'}
+            {...register("username", {
+              required: "username is required fields",
+            })}
+            type="text"
+            placeholder="First Name"
+            name="username"
+            onChange={handleChange}
+          />
+          <div className={errors.username ? 'invalid-feedback' : 'valid-feedback'}>
+            {errors.username ? errors.username.message : ''}
+          </div>
+        </div>
 
         <div className="col-md-4">
           <label htmlFor="validationServer01" className="form-label">First name</label>
