@@ -8,26 +8,36 @@ import 'react-toastify/dist/ReactToastify.css';
 import { useEffect } from 'react';
 import { setUser } from './store/reducers/authSlice';
 import { useAppDispatch } from './hooks/hooks';
+import { ErrorBoundary } from 'react-error-boundary'
+import Fallback from './components/Fallback';
 
 
 function App() {
   const dispatch = useAppDispatch()
   const user = JSON.parse(localStorage.getItem("user") || "{}")
-  useEffect(() =>{
+  useEffect(() => {
     dispatch(setUser(user))
   }, [])
+
+  const errorHandler = (error: any, errorInfo: any) => {
+    console.log(error, errorInfo)
+  }
+  
   return (
     <div className="App">
-      <BrowserRouter>
-      <ToastContainer />
-        <Routes>
-          <Route path="/" element={<Navigate to="/auth/login" replace />} />
-          <Route path='/auth' element={<Navigate to="/auth/login" replace />} />
-          <Route path="/auth/register" element={<Auth />} />
-          <Route path="/auth/login" element={<Login />} />
-          <Route path="/dashboard" element={< Dashboard />} />
-        </Routes>
-      </BrowserRouter>
+      <ErrorBoundary FallbackComponent={Fallback} onError={errorHandler}>
+        <BrowserRouter>
+          <ToastContainer />
+          <Routes>
+            <Route path="/" element={<Navigate to="/auth/login" replace />} />
+            <Route path='/auth' element={<Navigate to="/auth/login" replace />} />
+            <Route path="/auth/register" element={<Auth />} />
+            <Route path="/auth/login" element={<Login />} />
+            <Route path="/dashboard" element={< Dashboard />} />
+          </Routes>
+        </BrowserRouter>
+      </ErrorBoundary>
+
     </div>
   );
 }

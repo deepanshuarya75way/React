@@ -47,6 +47,9 @@ const Auth = () => {
       toast.success("Registered Successfuly")
       navigate('/auth/login')
     }
+    if(isRegisterError){
+      toast.error((registerError as any)?.data.error)
+    }
 
   }, [isRegisterSuccess, isRegisterError])
 

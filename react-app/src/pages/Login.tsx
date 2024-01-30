@@ -5,9 +5,10 @@ import { useEffect, useState } from "react";
 import { useLoginUserMutation } from "../services/AuthApi";
 import "react-toastify/dist/ReactToastify.css";
 import { toast } from "react-toastify";
-import { useActionData, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { useAppDispatch } from "../hooks/hooks";
 import { setUser } from "../store/reducers/authSlice";
+
 
 type LoginFormFields = {
   email: string;
@@ -42,8 +43,8 @@ const Auth = () => {
 
   useEffect(() => {
     if (isLoginSuccess) {
-      toast.success("Login Success");
       dispatch(setUser({_id: loginData._id, name: loginData.name, email: loginData.email, access_token: loginData.access_token, refresh_token: loginData.refresh_token}))
+      toast.success("Login Success");
       navigate("/dashboard");
     }
     if(isLoginError){
@@ -124,7 +125,6 @@ const Auth = () => {
             {errors.password ? errors.password.message : ""}
           </div>
         </div>
-
         <button className="btn btn-primary" type="submit">
           Submit
         </button>

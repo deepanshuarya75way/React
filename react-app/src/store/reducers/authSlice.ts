@@ -1,5 +1,8 @@
 import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 import { RootState } from "../store";
+import Cookies from 'universal-cookie'
+
+const cookies = new Cookies()
 
 export interface AuthState{
     _id: number | null
@@ -22,6 +25,8 @@ export const authSlice =  createSlice({
     initialState,
     reducers: {
         setUser:(state, action: PayloadAction<AuthState>) => {
+            cookies.set('access_token', action.payload.access_token, { path: '/' })
+            cookies.set('refresh_token', action.payload.refresh_token, { path: '/' })
             localStorage.setItem(
                 "user",
                 JSON.stringify({
@@ -39,6 +44,8 @@ export const authSlice =  createSlice({
             return state
         },
         logoutUser: (state) =>{
+            cookies.remove('access_token')
+            cookies.remove('refresh_token')
             localStorage.clear()
             state = initialState
             return state
