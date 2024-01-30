@@ -19,13 +19,11 @@ function App() {
     dispatch(setUser(user))
   }, [])
 
-  const errorHandler = (error: any, errorInfo: any) => {
-    console.log(error, errorInfo)
-  }
+
   
   return (
     <div className="App">
-      <ErrorBoundary FallbackComponent={Fallback} onError={errorHandler}>
+      
         <BrowserRouter>
           <ToastContainer />
           <Routes>
@@ -36,7 +34,7 @@ function App() {
             <Route path="/dashboard" element={< Dashboard />} />
           </Routes>
         </BrowserRouter>
-      </ErrorBoundary>
+      {/* </ErrorBoundary> */}
 
     </div>
   );

@@ -88,7 +88,7 @@ const Auth = () => {
               required: "username is required fields",
             })}
             type="text"
-            placeholder="First Name"
+            placeholder="username"
             name="username"
             onChange={handleChange}
           />

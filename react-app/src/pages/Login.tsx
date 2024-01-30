@@ -26,33 +26,6 @@ const Auth = () => {
   const [formValues, setFormValues] = useState(initialState);
   const { email, password } = formValues;
   const dispatch = useAppDispatch()
-  const [
-    loginUser,
-    {
-      data: loginData,
-      isSuccess: isLoginSuccess,
-      isError: isLoginError,
-      error: loginError,
-    },
-  ] = useLoginUserMutation();
-
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    setFormValues({ ...formValues, [name]: value });
-  };
-
-  useEffect(() => {
-    if (isLoginSuccess) {
-      dispatch(setUser({_id: loginData._id, name: loginData.name, email: loginData.email, access_token: loginData.access_token, refresh_token: loginData.refresh_token}))
-      toast.success("Login Success");
-      navigate("/dashboard");
-    }
-    if(isLoginError){
-        // @ts-ignore
-        toast.error(loginError?.data.error)
-    }
-  }, [isLoginSuccess, isLoginError]);
-
   const schema = yup.object({
     email: yup
       .string()
@@ -69,6 +42,38 @@ const Auth = () => {
     handleSubmit,
     formState: { errors },
   } = useForm<LoginFormFields>({ resolver: yupResolver(schema) });
+  const [
+    loginUser,
+    {
+      data: loginData,
+      isSuccess: isLoginSuccess,
+      isError: isLoginError,
+      error: loginError,
+    },
+  ] = useLoginUserMutation();
+  
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    console.log(e)
+    const { name, value } = e.target;
+    setFormValues({ ...formValues, [name]: value });
+  };
+  
+  useEffect(() => {
+    if (isLoginSuccess) {
+      const {user , access_token, refresh_token} = loginData
+      console.log(loginData)
+      dispatch(setUser({user, access_token, refresh_token}))
+      toast.success("Login Success");
+      navigate("/dashboard");
+    }
+    if(isLoginError){
+        // @ts-ignore
+        toast.error(loginError?.data.error)
+    }
+  }, [isLoginSuccess, isLoginError]);
+
+  
+  
 
   const onSubmit: SubmitHandler<LoginFormFields> = async (data) => {
     console.log(data);
