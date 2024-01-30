@@ -6,9 +6,9 @@ const baseQuery = fetchBaseQuery({
     credentials: 'include'
 })
 
-const baseQueryReauth = async (args: any, api:any , extraOptions: any) => {
+const baseQueryReauth = async (args: any, api:any , extraOptions:) => {
     let result = await baseQuery(args, api, extraOptions)
-    if(result?.error?.error === "jwt expired"){
+    if(result?.error?.data? === "jwt expired"){
         const refreshResult = await baseQuery('/refresh_token', api, extraOptions)
         if(refreshResult?.data){
             const user = useAppSelector(selectCurrentUser)
